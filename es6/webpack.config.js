@@ -3,6 +3,7 @@ const WebpackBar = require('webpackbar');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const WorkboxWebpackPlugin =  require('workbox-webpack-plugin');
+const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 
 const port = 3000;
 
@@ -11,7 +12,7 @@ module.exports = ((env) => {
     return {
         mode: "development",
 
-        entry: ["./src/workbox.js"],
+        entry: ["./src/workbox.js", "./src/es6-generator.js"],
 
         output: {
             filename: "static/app.js",
@@ -25,6 +26,8 @@ module.exports = ((env) => {
         devServer: {
             static: "./dist",
             port,
+            //服务器启动后打开浏览器
+            open: true,
             //启用 webpack 的热模块替换功能
             hot: true,
             //为所有服务启用gzip 压缩
@@ -39,8 +42,15 @@ module.exports = ((env) => {
                                              
             }
         },
-
+        
         plugins: [
+            //模块联合
+            new ModuleFederationPlugin({
+                name: 'host',
+                remotes: {
+                  app1: 'app1@http://localhost:3001/remoteEntry.js',
+                },
+            }),
             new WebpackBar({
                 color: "#f5a623",
                 profile: true,
@@ -51,6 +61,7 @@ module.exports = ((env) => {
                 filename: "index.html",
                 template: "./src/index.html"
             }),
+            //离线模式
             new WorkboxWebpackPlugin.GenerateSW({
                 clientsClaim: true,
                 skipWaiting: true

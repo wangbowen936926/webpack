@@ -11,4 +11,7 @@ function* generator(){
 
 const r = generator();
 
-const run = () => console.log(r.next());
+function run() {
+    console.log(r.next());
+}
+

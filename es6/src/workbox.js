@@ -1,12 +1,9 @@
-
-if(Reflect.has(navigator, "serivceWorker")){
-    window.addEventListener('load', () =>　{
-        navigator.serviceWorker.register("/service-worker.js").then(res => {
-            console.log("SW 注册成功：", res)
-        }).catch(err => {
-            console.log("SW 注册失败：", err)
-        })
-    })
-}else{
-    console.log("不存在")
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js').then(registration => {
+            console.log('SW 注册成功：', registration);
+        }).catch(registrationError => {
+            console.log('SW 注册失败：', registrationError);
+        });
+    });
 }

@@ -4,7 +4,7 @@
   "description": "",
   "main": "es6-generator.js",
   "scripts": {
-    "dev": "webpack serve --env=development --open index.html",
+    "dev": "webpack serve --env=development",
     "start": "http-server dist",
     "build": "webpack"
   },
